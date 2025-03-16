@@ -1,5 +1,48 @@
 implement Java program that uses lambda expressions and Stream API to filter students who scored above 75%, sort them by marks, and display their names.
 
+Code - 
+    
+class Student {
+    String name;
+    double marks;
+
+    public Student(String name, double marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public void display() {
+        System.out.println(name + " (" + marks + ")");
+    }
+}
+
+public class StudentFilterSort {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Alice", 80));
+        students.add(new Student("Bob", 72));
+        students.add(new Student("Charlie", 90));
+        students.add(new Student("David", 65));
+        students.add(new Student("Eve", 85));
+        students.add(new Student("Frank", 65));
+
+        List<Student> filteredStudents = students.stream()
+                .filter(student -> student.marks > 75)
+                .sorted(Comparator.comparingDouble((Student student) -> student.marks).reversed()
+                        .thenComparing(student -> student.name))
+                .collect(Collectors.toList());
+
+        if (filteredStudents.isEmpty()) {
+            System.out.println("No students scored above 75%.");
+        } else {
+            filteredStudents.forEach(Student::display);
+        }
+    }
+}
+
+
+
+    
 Step 1: Create the Student Class
 - Define a Student class with attributes:
     name (String)
