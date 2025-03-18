@@ -2,40 +2,48 @@ implement Java program that uses lambda expressions and Stream API to filter stu
 
 Code - 
     
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 class Student {
-    String name;
-    double marks;
+    private String name;
+    private double marks;
 
     public Student(String name, double marks) {
         this.name = name;
         this.marks = marks;
     }
 
+    public String getName() { return name; }
+    public double getMarks() { return marks; }
+
     public void display() {
-        System.out.println(name + " (" + marks + ")");
+        System.out.println("Name: " + name + ", Marks: " + marks);
     }
 }
 
 public class StudentFilterSort {
     public static void main(String[] args) {
-        List<Student> students = new ArrayList<>();
-        students.add(new Student("Alice", 80));
-        students.add(new Student("Bob", 72));
-        students.add(new Student("Charlie", 90));
-        students.add(new Student("David", 65));
-        students.add(new Student("Eve", 85));
-        students.add(new Student("Frank", 65));
+        List<Student> students = Arrays.asList(
+            new Student("Alice", 80),
+            new Student("Bob", 72),
+            new Student("Charlie", 90),
+            new Student("David", 65),
+            new Student("Eve", 85),
+            new Student("Frank", 65)
+        );
 
-        List<Student> filteredStudents = students.stream()
-                .filter(student -> student.marks > 75)
-                .sorted(Comparator.comparingDouble((Student student) -> student.marks).reversed()
-                        .thenComparing(student -> student.name))
-                .collect(Collectors.toList());
+        List<Student> filteredSortedStudents = students.stream()
+            .filter(s -> s.getMarks() > 75)
+            .sorted(Comparator.comparingDouble(Student::getMarks).reversed()
+                    .thenComparing(Student::getName))
+            .collect(Collectors.toList());
 
-        if (filteredStudents.isEmpty()) {
+        if (filteredSortedStudents.isEmpty()) {
             System.out.println("No students scored above 75%.");
         } else {
-            filteredStudents.forEach(Student::display);
+            filteredSortedStudents.forEach(Student::display);
         }
     }
 }
