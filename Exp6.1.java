@@ -1,10 +1,14 @@
 To implement a Java program that sorts a list of Employee objects (based on name, age, and salary) using lambda expressions and stream operations to demonstrate efficient data processing.
 
 Code :
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 class Employee {
-    String name;
-    int age;
-    double salary;
+    private String name;
+    private int age;
+    private double salary;
 
     public Employee(String name, int age, double salary) {
         this.name = name;
@@ -12,8 +16,12 @@ class Employee {
         this.salary = salary;
     }
 
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public double getSalary() { return salary; }
+
     public void display() {
-        System.out.println(name + " (" + age + ", " + salary + ")");
+        System.out.println("Name: " + name + ", Age: " + age + ", Salary: " + salary);
     }
 }
 
@@ -30,29 +38,34 @@ public class EmployeeSorting {
         employees.add(new Employee("Eve", 31, 50000));
         employees.add(new Employee("Frank", 27, 50000));
 
-        System.out.println("Sorted by Name:");
+        System.out.println("Sorting by Name:");
         employees.stream()
-                 .sorted(Comparator.comparing(emp -> emp.name))
-                 .forEach(Employee::display);
-
-        System.out.println("\nSorted by Age:");
+                .sorted(Comparator.comparing(Employee::getName))
+                .forEach(Employee::display);
+        
+        System.out.println("\nSorting by Age:");
         employees.stream()
-                 .sorted(Comparator.comparingInt(emp -> emp.age))
-                 .forEach(Employee::display);
-
-        System.out.println("\nSorted by Salary (Descending):");
+                .sorted(Comparator.comparingInt(Employee::getAge))
+                .forEach(Employee::display);
+        
+        System.out.println("\nSorting by Salary:");
         employees.stream()
-                 .sorted(Comparator.comparingDouble(emp -> -emp.salary))
-                 .forEach(Employee::display);
-
-        System.out.println("\nSorted by Salary, then by Name (if salary is same):");
+                .sorted(Comparator.comparingDouble(Employee::getSalary).reversed())
+                .forEach(Employee::display);
+        
+        System.out.println("\nSorting by Name and then by Age (Edge Case):");
         employees.stream()
-                 .sorted(Comparator.comparingDouble((Employee emp) -> emp.salary)
-                         .reversed()
-                         .thenComparing(emp -> emp.name))
-                 .forEach(Employee::display);
+                .sorted(Comparator.comparing(Employee::getName).thenComparingInt(Employee::getAge))
+                .forEach(Employee::display);
+        
+        System.out.println("\nSorting by Salary, then by Name (Edge Case):");
+        employees.stream()
+                .sorted(Comparator.comparingDouble(Employee::getSalary)
+                        .thenComparing(Employee::getName))
+                .forEach(Employee::display);
     }
 }
+
 
 
 
